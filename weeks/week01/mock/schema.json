@@ -1,0 +1,9 @@
+{
+  "id_column": "image_id",
+  "label_column": "label",
+  "label_type": "name",
+  "id_has_extension": false,
+  "classes": ["buildings", "forest", "glacier", "mountain", "sea", "street"],
+  "time_limit_minutes": 90,
+  "target_accuracy": null
+}
