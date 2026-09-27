@@ -104,3 +104,12 @@ def test_main_no_log(mock_files, capsys):
         "--minutes", "5", "--week", "1", "--dataset", "toy", "--log", str(log), "--no-log",
     ])
     assert not log.exists()
+
+
+def test_score_trailing_comma_gives_clear_error(mock_files):
+    d, schema, labels = mock_files
+    sub = write(d / "sub.csv", "image_id,label\nimg_00000,cat,\nimg_00001,dog,\nimg_00002,fox,\n")
+    r = score(sub, schema, labels)
+    assert r["format_ok"] is False
+    assert "more fields than the header" in r["errors"][0]
+    assert not any("unknown ids" in e for e in r["errors"])

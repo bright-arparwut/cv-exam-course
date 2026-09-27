@@ -47,3 +47,12 @@ def test_download_calls_kaggle_cli(tmp_path, monkeypatch):
     dest = tmp_path / "raw"
     download("owner/slug", dest)
     assert calls == [["kaggle", "datasets", "download", "-d", "owner/slug", "-p", str(dest), "--unzip"]]
+
+
+def test_find_class_root_skips_macosx_and_hidden_dirs(tmp_path):
+    make_dirs(tmp_path, [
+        "__MACOSX/seg_train/seg_train/buildings", "__MACOSX/seg_train/seg_train/forest",
+        ".cache/train/buildings", ".cache/train/forest",
+        "seg_train/seg_train/buildings", "seg_train/seg_train/forest",
+    ])
+    assert find_class_root(tmp_path, CLASSES) == tmp_path / "seg_train" / "seg_train"

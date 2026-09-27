@@ -20,16 +20,17 @@ root/
 ```python
 from ultralytics import YOLO
 model = YOLO("yolo11n-cls.pt")
-model.train(data="work/intel_cls", epochs=5, imgsz=160, batch=64,
-            device=0,          # "cpu", "mps" (Mac), 0 (first GPU)
-            workers=4, seed=0)
+model.train(data="work/intel_cls", epochs=5, imgsz=160, batch=64, seed=0)
+# device: leave it out and Ultralytics picks one. Force it with device="cpu" (safe everywhere),
+# device="mps" (your M1) or device=0 (first GPU). device=0 crashes on a CPU-only machine.
 ```
-- Output goes to `runs/classify/train*/`, which holds `weights/best.pt`, `weights/last.pt` and `results.csv`.
-- `model.trainer.save_dir` is that folder.
+- Output goes to a new folder every run (`train`, `train2`, `train3` …), each with `weights/best.pt`, `weights/last.pt` and `results.csv`.
+- **Never type that path by hand.** A second run writes to `train2`, so a hard-coded `train/` silently loads the old model. Use `model.trainer.save_dir`.
 
 ## 5. Predict
 ```python
-best = YOLO("runs/classify/train/weights/best.pt")
+from pathlib import Path
+best = YOLO(Path(model.trainer.save_dir) / "weights" / "best.pt")
 for r in best.predict(source="data/intel/test", imgsz=160, stream=True, verbose=False):
     r.path              # file path
     r.probs.top1        # int index of the best class

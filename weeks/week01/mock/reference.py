@@ -10,6 +10,7 @@ DATA = Path("data/intel")
 WORK = Path("work/intel_cls")
 
 # 1. train/val split (Ultralytics needs root/train/<cls> and root/val/<cls>)
+shutil.rmtree(WORK, ignore_errors=True)  # never train on files left over from an older split
 rng = random.Random(0)
 for cls_dir in sorted(p for p in (DATA / "train").iterdir() if p.is_dir()):
     files = sorted(f for f in cls_dir.iterdir() if not f.name.startswith("."))

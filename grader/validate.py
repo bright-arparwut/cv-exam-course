@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+import warnings
 from pathlib import Path
 
 import pandas as pd
@@ -13,8 +14,20 @@ _INT_RE = re.compile(r"^\d+$")
 
 
 def read_submission(path: str | Path) -> pd.DataFrame:
-    """Read a CSV with every cell as a string; utf-8-sig strips an Excel BOM."""
-    return pd.read_csv(path, dtype=str, keep_default_na=False, encoding="utf-8-sig")
+    """Read a CSV with every cell as a string; utf-8-sig strips an Excel BOM.
+
+    index_col=False stops pandas from silently shifting columns when rows carry
+    an extra field (e.g. a trailing comma); the warning it raises instead is
+    turned into a ParserError so the grader reports it as a format error.
+    """
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", pd.errors.ParserWarning)
+        try:
+            return pd.read_csv(path, dtype=str, keep_default_na=False, encoding="utf-8-sig", index_col=False)
+        except pd.errors.ParserWarning:
+            raise pd.errors.ParserError(
+                "some rows have more fields than the header (trailing comma or extra column?)"
+            ) from None
 
 
 def _examples(items, k: int = 3) -> str:

@@ -17,3 +17,8 @@ def test_week01_brief_states_the_schema():
     brief = (MOCK / "README.md").read_text()
     assert "image_id,label" in brief
     assert "WITHOUT" in brief and "90 minutes" in brief
+
+
+def test_week01_brief_explains_how_to_set_target():
+    brief = (MOCK / "README.md").read_text()
+    assert "target_accuracy" in brief and "0.03" in brief

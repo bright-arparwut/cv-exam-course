@@ -2,6 +2,17 @@
 
 **Time limit: 90 minutes.** Start the timer when you open this file's "Task" section.
 
+## One-time: set the pass target (before your first attempt)
+`schema.json` ships with `"target_accuracy": null`, so the grader prints `NO TARGET` until you set it.
+On a GPU Studio, after the setup below, run the reference solution once and grade it without logging:
+
+    python weeks/week01/mock/reference.py
+    python -m grader.score --submission submission.csv --schema weeks/week01/mock/schema.json \
+      --labels data/_hidden/intel/test_labels.csv --minutes 0 --week 1 --dataset intel --no-log
+
+Set `target_accuracy` to that accuracy minus 0.03, rounded down to 2 decimals (0.912 → `0.88`), then delete `submission.csv`.
+Do this without reading `reference.py`.
+
 ## Before the timer (setup, not timed)
     python -m data_prep.prepare_intel
     python -c "from ultralytics import YOLO; YOLO('yolo11n-cls.pt')"   # pre-download weights

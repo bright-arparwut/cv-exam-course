@@ -63,3 +63,29 @@ def test_write_submission_index_with_ext_passes_grader(tmp_path):
     schema = Schema("filename", "class", "index", True, ("forest", "sea"))
     errors, _ = validate_submission(read_submission(out), schema, {"img_00000", "img_00001"})
     assert errors == []
+
+
+def test_make_val_split_clears_stale_files(tmp_path):
+    mod = load("02_val_split/reference.py")
+    src = tmp_path / "train"
+    for cls in ("cat", "dog"):
+        (src / cls).mkdir(parents=True)
+        for i in range(10):
+            (src / cls / f"{i}.jpg").write_bytes(b"x")
+    stale = tmp_path / "work" / "train" / "cat" / "old_leaked.jpg"
+    stale.parent.mkdir(parents=True)
+    stale.write_bytes(b"x")
+    mod.make_val_split(src, tmp_path / "work")
+    assert not stale.exists()
+
+
+def test_mock_reference_clears_work_dir_before_split():
+    src = (DRILLS.parent / "mock" / "reference.py").read_text()
+    assert src.index("shutil.rmtree(WORK") < src.index("for cls_dir in")
+
+
+def test_notes_do_not_teach_gpu_only_device_or_fixed_run_path():
+    notes = (DRILLS.parent / "notes.md").read_text()
+    assert "device=0," not in notes
+    assert "runs/classify/train/weights/best.pt" not in notes
+    assert "trainer.save_dir" in notes
