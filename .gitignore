@@ -1,0 +1,11 @@
+data/
+runs/
+work/
+submission*.csv
+*.pt
+*.onnx
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+.venv/
+.superpowers/
