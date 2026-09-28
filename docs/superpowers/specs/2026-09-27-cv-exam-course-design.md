@@ -36,8 +36,8 @@
 |---|---|
 | Duration | 12 weeks |
 | Weekly time | 15–20 hrs |
-| Main compute | Lightning AI Studios (GPU for build days; CPU-only for some mocks) |
-| Local | MacBook M1 Pro (MPS/CPU) for drills and small runs |
+| Main compute | MacBook M1 Pro (MPS for training, CPU for some mocks) — changed 2026-09-28 from Lightning AI |
+| Optional | Lightning AI GPU Studio when a model is too slow on the M1 (e.g. ViT fine-tuning) |
 | Exam tool | Ultralytics YOLO classify (`yolo11n-cls` / `yolov8n-cls`) |
 | Learning tools | PyTorch, PyTorch Lightning, Hugging Face (`transformers`, `datasets`, pipelines), timm |
 | Data source | Kaggle, via the Kaggle API |
@@ -98,7 +98,7 @@ Inputs are `submission.csv`, the hidden `test_labels.csv` and the brief's schema
 
 It then appends a row to `logs/progress.md`: week, dataset, accuracy, macro-F1, minutes, pass/fail, blockers.
 
-**Target accuracy per dataset:** the author (Claude, when building each week) runs a quick Ultralytics baseline (`yolo11n-cls`, default settings, ~10 min on a GPU). The target is `baseline − 3 percentage points`, recorded in the brief. A pass means reaching the target within the time limit.
+**Target accuracy per dataset:** the author (Claude, when building each week) runs a quick Ultralytics baseline (`yolo11n-cls`, default settings, ~10–20 min on the M1). The target is `baseline − 3 percentage points`, recorded in the brief. A pass means reaching the target within the time limit.
 
 ### 5.5 Private splits (`datasets/prepare_<name>.py`)
 - Downloads with `kaggle datasets download`.
@@ -146,7 +146,7 @@ In every mock, **Ultralytics is the primary submission**. If time remains, you m
 1. **Data:** quality audit and split; write down how labels would be collected at a plant.
 2. **Model:** train with Ultralytics; compare against the best model from the understanding track (ViT or CLIP linear probe) on accuracy, CPU latency and model size.
 3. **Export:** ONNX; benchmark CPU inference.
-4. **Serve:** a FastAPI `POST /predict` endpoint (image → label + confidence) in Docker on Lightning AI.
+4. **Serve:** a FastAPI `POST /predict` endpoint (image → label + confidence) in Docker (run locally on the Mac; Lightning AI optional).
 5. **Monitor:** log confidence per request, plus a simple drift check (brightness and colour statistics vs the training set).
 
 ### 8.2 System design practice (from week 8)

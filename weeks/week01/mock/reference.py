@@ -4,6 +4,10 @@ import shutil
 from pathlib import Path
 
 import pandas as pd
+import torch
+
+# Ultralytics only uses the Mac GPU when asked: prefer MPS (M1), then CUDA, else CPU
+DEVICE = "mps" if torch.backends.mps.is_available() else (0 if torch.cuda.is_available() else "cpu")
 from ultralytics import YOLO
 
 DATA = Path("data/intel")
@@ -24,13 +28,13 @@ for cls_dir in sorted(p for p in (DATA / "train").iterdir() if p.is_dir()):
 
 # 2. train
 model = YOLO("yolo11n-cls.pt")
-model.train(data=str(WORK), epochs=5, imgsz=160, batch=64, seed=0)
+model.train(data=str(WORK), epochs=5, imgsz=160, batch=64, seed=0, device=DEVICE)
 best = YOLO(Path(model.trainer.save_dir) / "weights" / "best.pt")
 
 # 3. predict -> CSV
 rows = []
 test_files = sorted(p for p in (DATA / "test").iterdir() if not p.name.startswith("."))
-for r in best.predict(source=[str(p) for p in test_files], imgsz=160, stream=True, verbose=False):
+for r in best.predict(source=[str(p) for p in test_files], imgsz=160, device=DEVICE, stream=True, verbose=False):
     rows.append({"image_id": Path(r.path).stem, "label": r.names[r.probs.top1]})
 pd.DataFrame(rows, columns=["image_id", "label"]).to_csv("submission.csv", index=False)
 print(f"wrote {len(rows)} rows (expected {len(test_files)})")

@@ -89,3 +89,10 @@ def test_notes_do_not_teach_gpu_only_device_or_fixed_run_path():
     assert "device=0," not in notes
     assert "runs/classify/train/weights/best.pt" not in notes
     assert "trainer.save_dir" in notes
+
+
+def test_ultralytics_references_pick_mps_on_mac():
+    for rel in ("mock/reference.py", "drills/01_ultralytics_train_predict/reference.py"):
+        src = (DRILLS.parent / rel).read_text()
+        assert "torch.backends.mps.is_available()" in src, rel
+        assert "device=DEVICE" in src, rel

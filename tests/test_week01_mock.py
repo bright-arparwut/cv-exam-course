@@ -22,3 +22,10 @@ def test_week01_brief_states_the_schema():
 def test_week01_brief_explains_how_to_set_target():
     brief = (MOCK / "README.md").read_text()
     assert "target_accuracy" in brief and "0.03" in brief
+
+
+def test_readme_and_brief_target_mac_setup():
+    readme = (MOCK.parent.parent.parent / "README.md").read_text()
+    brief = (MOCK / "README.md").read_text()
+    assert "## Setup (Mac" in readme and "venv" in readme
+    assert "GPU Studio" not in brief

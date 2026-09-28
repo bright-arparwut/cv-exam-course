@@ -4,7 +4,7 @@
 
 ## One-time: set the pass target (before your first attempt)
 `schema.json` ships with `"target_accuracy": null`, so the grader prints `NO TARGET` until you set it.
-On a GPU Studio, after the setup below, run the reference solution once and grade it without logging:
+On your Mac (it uses the M1 GPU automatically; ~10–20 min), after the setup below, run the reference solution once and grade it without logging:
 
     python weeks/week01/mock/reference.py
     python -m grader.score --submission submission.csv --schema weeks/week01/mock/schema.json \
