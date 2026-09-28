@@ -102,4 +102,4 @@ def test_drill_attempts_go_in_committed_practice_folder():
     readme = (DRILLS / "README.md").read_text()
     assert "weeks/week01/practice/" in readme
     assert "work/drills" not in readme
-    assert (DRILLS.parent / "practice" / ".gitkeep").exists()
+    assert (DRILLS.parent / "practice").is_dir()
