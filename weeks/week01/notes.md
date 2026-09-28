@@ -21,7 +21,7 @@ root/
 from ultralytics import YOLO
 model = YOLO("yolo11n-cls.pt")
 model.train(data="work/intel_cls", epochs=5, imgsz=160, batch=64, seed=0)
-# device: leave it out and Ultralytics picks one. Force it with device="cpu" (safe everywhere),
+# device: leave it out and Ultralytics picks CUDA if present, else CPU (on a Mac: CPU). Set it with device="cpu" (safe everywhere),
 # device="mps" (your M1) or device=0 (first GPU). device=0 crashes on a CPU-only machine.
 ```
 - Output goes to a new folder every run (`train`, `train-2`, `train-3` …; older versions: `train2`), each with `weights/best.pt`, `weights/last.pt` and `results.csv`.
