@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _runner import run  # noqa: E402
 
-WORK = Path("work/intel_cls")  # made on Day 1, step 3
+WORK = Path("data/intel_cls")  # made on Day 1, step 3 (or: python -m data_prep.yolo_layout)
 
 # Edit freely. Keep each run short - you want many data points, not one perfect model.
 GRID = [
@@ -27,6 +27,8 @@ GRID = [
     # Thu: model size and device
     {"model": "yolo11s-cls.pt", "epochs": 3, "imgsz": 160, "device": "mps"},
     {"model": "yolo11n-cls.pt", "epochs": 1, "imgsz": 160, "device": "cpu"},
+    # Full data: run `python -m data_prep.yolo_layout --full --out data/intel_full`, add a
+    # "data" key per config and train on it - then compare GRADED accuracy, not val top1.
 ]
 
 

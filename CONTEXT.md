@@ -28,7 +28,7 @@ cv-exam-course/
   AGENTS.md                  # agent config (issue tracker, labels, domain docs)
   README.md                  # Mac setup + weekly rhythm
   grader/                    # scores submission.csv: schema check → metrics → logs/progress.md
-  data_prep/                 # Kaggle download + private split (train/, anonymised test/, hidden labels)
+  data_prep/                 # Kaggle download + private split; yolo_layout.py builds train/val symlink folders
   weeks/weekNN/
     notes.md                 # Mon–Tue concept
     build/                   # Wed–Thu understanding-track exercises (from week 2)
@@ -41,6 +41,9 @@ cv-exam-course/
   docs/agents/               # agent-skill conventions
   # git-ignored, generated:
   data/                      # raw downloads, splits, data/_hidden/ labels
+    intel/                   # exam-style layout: train/<class>/ + flat test/ (what mocks use)
+    intel_cls/               # Ultralytics-ready train/ + val/ symlinks (python -m data_prep.yolo_layout)
+    intel_full/              # same, every image in train AND val (--full) for final runs
   work/                      # image copies (e.g. train/val split for Ultralytics)
   runs/                      # Ultralytics training output
   *.pt, submission*.csv

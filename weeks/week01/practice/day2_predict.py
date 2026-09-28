@@ -102,7 +102,7 @@ def step5_grade(ctx):
 
 def step6_cpu_vs_mps(ctx):
     """(optional, slow) Time 1 epoch on CPU vs MPS"""
-    # TODO: train a fresh yolo11n-cls for 1 epoch on "work/intel_cls" twice - device="cpu" and
+    # TODO: train a fresh yolo11n-cls for 1 epoch on "data/intel_cls" twice - device="cpu" and
     #       device="mps" - and print how long each took. How slow would a GPU-less test machine be?
     # Tools:
     #   import time; t0 = time.perf_counter(); ...; time.perf_counter() - t0

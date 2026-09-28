@@ -11,7 +11,7 @@ How to work:
 TODO list
   [ ] Step 1  Check your environment (Python, torch, MPS)
   [ ] Step 2  Count images per class and test images
-  [ ] Step 3  Make the train/val split in work/intel_cls
+  [x] Step 3  Build the train/val folder in data/intel_cls (done for you - just run it)
   [ ] Step 4  Train yolo11n-cls for 1 epoch
   [ ] Step 5  Explore what training produced (weights, results.csv)
 """
@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _runner import ROOT, run  # noqa: E402
 
 DATA = Path("data/intel")
-WORK = Path("work/intel_cls")
+WORK = Path("data/intel_cls")  # Ultralytics-ready train/val folder, built in step 3
 DEVICE = "mps"  # your M1 GPU. Try "cpu" too - the test machine may have no GPU.
 
 
@@ -57,25 +57,21 @@ def step2_explore(ctx):
 
 
 def step3_val_split(ctx):
-    """Make the train/val split in work/intel_cls"""
-    # TODO: copy ~10% of every class into WORK/val/<class>/ and the rest into WORK/train/<class>/.
-    #       Ultralytics needs root/train/<class> and root/val/<class>.
-    # Tools:
-    #   shutil.rmtree(WORK, ignore_errors=True)   -> start clean (stale files leak into training!)
-    #   random.Random(0).shuffle(list_of_files)   -> reproducible shuffle
-    #   max(1, int(len(files) * 0.1))             -> at least 1 val image per class
-    #   out.mkdir(parents=True, exist_ok=True)
-    #   shutil.copy(src, dst)
-    #   skip hidden files: f.name.startswith(".")
-    raise NotImplementedError
+    """Build the train/val folder (done for you) in data/intel_cls"""
+    # DONE FOR YOU - nothing to write. This builds data/intel_cls/train/<class>/ and
+    # data/intel_cls/val/<class>/ (90/10 split) from data/intel/train using symlinks, so no
+    # images are copied. Same as running in the terminal:
+    #     python -m data_prep.yolo_layout
+    # Train on every image instead (for a final run):
+    #     python -m data_prep.yolo_layout --full --out data/intel_full
+    # Making this split yourself is still an exam skill - it's Friday's drill 02.
+    from data_prep.yolo_layout import make_yolo_cls_dir
+    print(make_yolo_cls_dir(DATA / "train", WORK, val_frac=0.1))
     # --- check (don't edit) ---
     n_train = len(list((WORK / "train").rglob("*.jpg")))
     n_val = len(list((WORK / "val").rglob("*.jpg")))
     print(f"train={n_train} val={n_val}")
     assert n_train + n_val == 4800 and 400 <= n_val <= 560, "expected ~480 val images out of 4800"
-    for cls in (WORK / "val").iterdir():
-        overlap = {p.name for p in cls.iterdir()} & {p.name for p in (WORK / "train" / cls.name).iterdir()}
-        assert not overlap, f"{cls.name}: the same file is in train and val"
 
 
 def step4_train(ctx):
