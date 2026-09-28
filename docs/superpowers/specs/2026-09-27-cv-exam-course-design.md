@@ -171,6 +171,7 @@ cv-exam-course/
     build/                     # Lightning / HF code
     drills/                    # prompt.md + reference.py per drill
     mock/README.md             # the brief
+    practice/                  # the learner's own code (committed)
   datasets/prepare_<name>.py   # download + private split
   grader/score.py              # format check + metrics + log
   logs/progress.md             # one row per mock

@@ -96,3 +96,10 @@ def test_ultralytics_references_pick_mps_on_mac():
         src = (DRILLS.parent / rel).read_text()
         assert "torch.backends.mps.is_available()" in src, rel
         assert "device=DEVICE" in src, rel
+
+
+def test_drill_attempts_go_in_committed_practice_folder():
+    readme = (DRILLS / "README.md").read_text()
+    assert "weeks/week01/practice/" in readme
+    assert "work/drills" not in readme
+    assert (DRILLS.parent / "practice" / ".gitkeep").exists()

@@ -20,7 +20,7 @@ python -c "import torch; print('MPS available:', torch.backends.mps.is_available
 ## Weekly rhythm
 | Day | Block | Where |
 |---|---|---|
-| Mon–Tue | Concept | `weeks/weekNN/notes.md` |
+| Mon–Tue | Concept | `weeks/weekNN/notes.md` (code in `practice/`) |
 | Wed–Thu | Build | `weeks/weekNN/build/` |
 | Fri | Drills | `weeks/weekNN/drills/` |
 | Sat | Mock | `weeks/weekNN/mock/README.md` → `python -m grader.score ...` |
@@ -29,5 +29,7 @@ python -c "import torch; print('MPS available:', torch.backends.mps.is_available
 ## Layout
 - `grader/`: scores a `submission.csv` (format check, then accuracy, macro-F1 and per-class recall) and logs it.
 - `data_prep/`: downloads Kaggle datasets and makes private splits (hidden labels go in `data/_hidden/`).
-- `weeks/`: notes, drills and mocks.
+- `weeks/weekNN/`: `notes.md`, `build/` (from week 2), `drills/`, `mock/`, and `practice/` for **your own code** (committed).
+- `work/`, `runs/`, `data/`: generated files, git-ignored.
+- See `CONTEXT.md` for the full layout and vocabulary.
 - `logs/progress.md`: one row per mock.
